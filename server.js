@@ -1,13 +1,14 @@
 var express = require('express');
 var app = express();
+var fs = require('fs');
 var Gpio = require('onoff').Gpio;
 
 var LED = new Gpio(4, 'out');
 
-
+var blinkInterval = setInterval(blinkLED, 250);
 
 function endBlink(){
-//   clearInterval(blinkInterval);
+  clearInterval(blinkInterval);
   LED.writeSync(0);
   LED.unexport();
 }
@@ -25,7 +26,6 @@ app.get('/', function(req, res){
 });
 
 app.post('/on', function(req, res){
-    blinkLED();
     console.log('Allumez');
     res.redirect('/');
 })
