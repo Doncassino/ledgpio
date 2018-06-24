@@ -31,7 +31,7 @@ app.post('/on', function(req, res){
 })
 
 app.post('/off', function(req, res){
-    endBlink();
+    setTimeout(endBlink, 50);
     console.log('Eteindre');
     res.redirect('/');
 })
