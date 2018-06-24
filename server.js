@@ -3,7 +3,20 @@ var app = express();
 var Gpio = require('onoff').Gpio;
 
 var LED = new Gpio(4, 'out');
-var blinkInterval = setInterval(BlinkLED, 250);
+
+function blinkLED(){
+  if(LED.readSync()===0){
+  	LED.writeSync(1);
+  }else{
+	LED.writeSync(0);
+  }
+}
+
+function endBlink(blinkInterval){
+  clearInterval(blinkInterval);
+  LED.writeSync(0);
+  LED.unexport();
+}
 
 
 app.get('/', function(req, res){
@@ -11,13 +24,19 @@ app.get('/', function(req, res){
 });
 
 app.post('/on', function(req, res){
+    var blinkInterval = setInterval(blinkLED, 250);
     console.log('Allumez');
     res.redirect('/');
 })
 
 app.post('/off', function(req, res){
+    var blinkInterval = setInterval(blinkLED, 250);
+    endBlink(blinkInterval);
     console.log('Eteindre');
     res.redirect('/');
 })
+
+
+
 
 app.listen(8000);
